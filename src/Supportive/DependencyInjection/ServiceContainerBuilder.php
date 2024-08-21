@@ -83,8 +83,11 @@ final class ServiceContainerBuilder
             self::loadConfiguration($container, $this->configFile);
         }
 
+        $cacheFileFromConfig = null;
         /** @var ?string $cacheFileFromConfig */
-        $cacheFileFromConfig = $container->getExtensionConfig('deptrac')[0]['cache_file'] ?? null; // if there is any
+        foreach($container->getExtensionConfig('deptrac') as $config) {
+            $cacheFileFromConfig = $config['cache_file'] ?? $cacheFileFromConfig; // if there is any
+        }
         $cache = $cacheOverride ?? $cacheFileFromConfig; // override if there is a no-cache or path to file
         $cache = $cache ?? '.deptrac.cache'; // override if there is no file specified and needs one
 
